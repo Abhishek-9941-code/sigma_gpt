@@ -22,7 +22,7 @@ app.use(express.json());
 
 // ===============================
 // CORS
-// ===============================
+
 
 app.use(
     cors({
@@ -78,7 +78,7 @@ const connectDB = async () => {
         await mongoose.connect(
             process.env.MONGODB_URI
         );
-
+        console.log(process.env.MONGODB_URI)
         console.log("Connected with Database!");
 
         app.listen(PORT, () => {
