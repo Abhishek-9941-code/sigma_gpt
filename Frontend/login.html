@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - SigmaGPT</title>
+    <link rel="stylesheet" href="./css/auth.css">
+</head>
+
+<body>
+
+  <div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>SigmaGPT</h1>
+
+        <h2>Welcome Back</h2>
+
+        <p class="auth-subtitle">
+            Login to continue chatting with SigmaGPT
+        </p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="loginBtn"
+            >
+                Login
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <p class="auth-link">
+            Don't have an account?
+            <a href="register.html">
+                Create account
+            </a>
+        </p>
+
+    </div>
+
+</div>
+    <script>
+
+        const API_BASE_URL = `http://${window.location.hostname}:8080`;
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const emailInput =
+            document.getElementById("email");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const loginBtn =
+            document.getElementById("loginBtn");
+
+        const message =
+            document.getElementById("message");
+
+
+        loginForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const email =
+                    emailInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+
+                loginBtn.disabled = true;
+
+                loginBtn.textContent =
+                    "Logging in...";
+
+                message.textContent = "";
+
+
+                try {
+
+                    const response = await fetch(
+                        `${API_BASE_URL}/api/auth/login`,
+                        {
+                            method: "POST",
+
+                            credentials: "include",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                email: email,
+                                password: password
+                            })
+                        }
+                    );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Login Response:",
+                        data
+                    );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.error ||
+                            "Login failed"
+                        );
+
+                    }
+
+
+                    message.textContent =
+                        "Login successful!";
+
+
+                    // Browser ko session cookie
+                    // store karne ke baad chat page
+                    // par bhejenge.
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "index.html";
+
+                    }, 500);
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Login Error:",
+                        error
+                    );
+
+                    message.textContent =
+                        error.message;
+
+
+                } finally {
+
+                    loginBtn.disabled = false;
+
+                    loginBtn.textContent =
+                        "Login";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
