@@ -26,8 +26,13 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: ["http://127.0.0.1:5500","https://sigma-gpt-livid.vercel.app/"],
-        credentials: true
+        origin: [
+            "http://127.0.0.1:5500",
+            "https://sigma-gpt-livid.vercel.app"
+        ],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
 
